@@ -23,9 +23,9 @@ from utils.text_utils import detect_evolution_mode
 def create_gradio_interface():
     """创建Gradio界面"""
     with gr.Blocks(title="Qwen2.5-Coder 批量自我演化系统", theme=gr.themes.Soft()) as demo:
-        gr.Markdown("# 🤖 Qwen2.5-Coder 批量自我演化系统")
+        gr.Markdown("# Qwen2.5-Coder 批量自我演化系统")
         gr.Markdown("""
-        ## 🚀 功能特性：
+        ## 功能特性：
         1. **普通代码生成**：使用本地1.5B模型生成代码
         2. **批量自我演化**：输入包含多个引号内的问题，系统自动提取并批量训练
         3. **智能问题提取**：自动从文本中提取引号内的编程问题
@@ -33,14 +33,14 @@ def create_gradio_interface():
         
         with gr.Row():
             with gr.Column(scale=1):
-                gr.Markdown("### 📁 模型设置")
+                gr.Markdown("### 模型设置")
                 model_path_input = gr.Textbox(
                     label="模型路径", value=DEFAULT_MODEL_PATH, lines=1
                 )
-                load_btn = gr.Button("🔄 加载模型", variant="primary", size="lg")
+                load_btn = gr.Button("加载模型", variant="primary", size="lg")
                 load_status = gr.Textbox(label="模型状态", interactive=False, lines=3)
                 
-                with gr.Accordion("🔑 API设置", open=False):
+                with gr.Accordion("API设置", open=False):
                     api_key_input = gr.Textbox(
                         label="API密钥", value=API_CONFIG["api_key"], type="password", lines=1
                     )
@@ -51,7 +51,7 @@ def create_gradio_interface():
                         label="14B API地址", value=API_CONFIG["qwen_14b_api_url"], lines=1
                     )
                 
-                with gr.Accordion("⚙️ 自我演化设置", open=False):
+                with gr.Accordion("自我演化设置", open=False):
                     enable_evolution = gr.Checkbox(
                         label="启用自我演化", value=EVOLUTION_CONFIG["enable_self_evolution"]
                     )
@@ -67,7 +67,7 @@ def create_gradio_interface():
                         value=EVOLUTION_CONFIG["learning_rate"], step=1e-6
                     )
                 
-                with gr.Accordion("📊 数据管理", open=False):
+                with gr.Accordion("数据管理", open=False):
                     with gr.Row():
                         view_data_btn = gr.Button("查看训练数据", variant="secondary")
                         test_extraction_btn = gr.Button("测试问题提取", variant="secondary")
@@ -76,7 +76,7 @@ def create_gradio_interface():
                         label="训练数据", interactive=False, lines=10
                     )
                 
-                with gr.Accordion("⚙️ 生成设置", open=False):
+                with gr.Accordion("生成设置", open=False):
                     system_prompt_input = gr.Textbox(
                         label="系统提示词",
                         value=GENERATION_CONFIG["default_system_prompt"],
@@ -96,7 +96,7 @@ def create_gradio_interface():
                     )
             
             with gr.Column(scale=2):
-                gr.Markdown("### 💻 代码生成与自我演化")
+                gr.Markdown("### 代码生成与自我演化")
                 
                 mode_indicator = gr.Markdown("**当前模式：** 等待输入...")
                 
@@ -116,8 +116,8 @@ def create_gradio_interface():
                 )
                 
                 with gr.Row():
-                    generate_btn = gr.Button("✨ 生成代码", variant="primary", size="lg")
-                    evolve_btn = gr.Button("🚀 执行自我演化", variant="stop", size="lg")
+                    generate_btn = gr.Button("生成代码", variant="primary", size="lg")
+                    evolve_btn = gr.Button("执行自我演化", variant="stop", size="lg")
                 
                 status_output = gr.Textbox(
                     label="执行状态", interactive=False, lines=12
@@ -207,7 +207,7 @@ def create_gradio_interface():
         
         # 使用说明
         gr.Markdown("""
-        ## 📖 使用说明：
+        ## 使用说明：
         
         ### 1. 普通代码生成：
         - 输入普通的代码生成提示

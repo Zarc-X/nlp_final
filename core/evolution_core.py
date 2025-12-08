@@ -155,7 +155,7 @@ def fine_tune_on_examples(examples: List[Dict]) -> str:
         
         model.eval()
         
-        return f"✅ 微调完成，处理了{successful_updates}个示例，平均损失: {avg_loss:.4f}"
+        return f"微调完成，处理了{successful_updates}个示例，平均损失: {avg_loss:.4f}"
         
     except Exception as e:
         model.eval()
@@ -167,7 +167,7 @@ def batch_self_evolution(problems: List[str], system_prompt: str = None) -> str:
     批量自我演化流程
     """
     if not problems:
-        return "❌ 错误：没有提取到有效的编程问题。请确保问题用引号括起来。"
+        return "错误：没有提取到有效的编程问题。请确保问题用引号括起来。"
     
     total_problems = len(problems)
     batch_size = EVOLUTION_CONFIG["evolution_batch_size"]
@@ -176,13 +176,13 @@ def batch_self_evolution(problems: List[str], system_prompt: str = None) -> str:
     tracker = create_progress_tracker(total_problems)
     
     report_lines = []
-    report_lines.append("🚀 开始批量自我演化流程")
-    report_lines.append(f"📋 提取到 {total_problems} 个编程问题")
-    report_lines.append(f"📦 批量大小: {batch_size}")
+    report_lines.append("开始批量自我演化流程")
+    report_lines.append(f"提取到 {total_problems} 个编程问题")
+    report_lines.append(f"批量大小: {batch_size}")
     report_lines.append("=" * 60)
     
     # 显示提取到的问题
-    report_lines.append("📝 提取到的问题：")
+    report_lines.append("提取到的问题：")
     for i, problem in enumerate(problems, 1):
         if len(problem) > 80:
             display_problem = problem[:77] + "..."
@@ -200,7 +200,7 @@ def batch_self_evolution(problems: List[str], system_prompt: str = None) -> str:
         batch_num = i // batch_size + 1
         total_batches = (total_problems + batch_size - 1) // batch_size
         
-        report_lines.append(f"\n📁 处理批次 {batch_num}/{total_batches}")
+        report_lines.append(f"\n处理批次 {batch_num}/{total_batches}")
         
         # 并行处理批次中的问题
         with ThreadPoolExecutor(max_workers=min(batch_size, 4)) as executor:
@@ -229,9 +229,9 @@ def batch_self_evolution(problems: List[str], system_prompt: str = None) -> str:
                     
                     if success:
                         successful_examples.append(result)
-                        report_lines.append(f"  ✅ 已保存到: {result['saved_file']}")
+                        report_lines.append(f"  已保存到: {result['saved_file']}")
                     else:
-                        report_lines.append(f"  ❌ 失败: {result.get('validation_result', '未知错误')[:80]}...")
+                        report_lines.append(f"  失败: {result.get('validation_result', '未知错误')[:80]}...")
                         
                 except Exception as e:
                     progress_report, tracker = update_progress(tracker, "处理异常", False, str(e))
@@ -241,7 +241,7 @@ def batch_self_evolution(problems: List[str], system_prompt: str = None) -> str:
     
     # 微调模型
     if successful_examples:
-        report_lines.append("\n🎯 开始模型微调...")
+        report_lines.append("\n开始模型微调...")
         
         # 准备训练数据
         training_data = []
@@ -276,19 +276,19 @@ def batch_self_evolution(problems: List[str], system_prompt: str = None) -> str:
         with open(stats_file, 'w', encoding='utf-8') as f:
             json.dump(stats, f, ensure_ascii=False, indent=2)
         
-        report_lines.append(f"📊 统计数据已保存到: {stats_file}")
+        report_lines.append(f"统计数据已保存到: {stats_file}")
     else:
-        report_lines.append("\n⚠️ 没有成功的示例，跳过微调")
+        report_lines.append("\n没有成功的示例，跳过微调")
     
     # 最终报告
     report_lines.append("\n" + "=" * 60)
-    report_lines.append("🎉 批量自我演化流程完成！")
-    report_lines.append(f"✅ 成功处理: {tracker['success']}/{total_problems}")
-    report_lines.append(f"❌ 失败: {tracker['failed']}/{total_problems}")
-    report_lines.append(f"⏱️ 总用时: {time.time() - tracker['start_time']:.1f}秒")
+    report_lines.append("批量自我演化流程完成！")
+    report_lines.append(f"成功处理: {tracker['success']}/{total_problems}")
+    report_lines.append(f"失败: {tracker['failed']}/{total_problems}")
+    report_lines.append(f"总用时: {time.time() - tracker['start_time']:.1f}秒")
     
     if successful_examples:
-        report_lines.append(f"💾 模型已更新，检查点已保存")
+        report_lines.append(f"模型已更新，检查点已保存")
     
     return "\n".join(report_lines)
 
@@ -324,21 +324,21 @@ def generate_code(prompt, system_prompt, max_tokens, temperature, top_p, enable_
                     success, result = process_single_problem(clean_prompt, system_prompt)
                     
                     if success:
-                        status = f"✅ 单问题自我演化完成！\n"
-                        status += f"📁 已保存训练数据到: {result['saved_file']}\n"
+                        status = f"单问题自我演化完成！\n"
+                        status += f"已保存训练数据到: {result['saved_file']}\n"
                         
                         # 微调模型
                         fine_tune_result = fine_tune_on_examples([{
                             "instruction": result["problem"],
                             "code": result["generated_code"]
                         }])
-                        status += f"🎯 {fine_tune_result}"
+                        status += f"{fine_tune_result}"
                         
                         return status, result["generated_code"]
                     else:
-                        return f"❌ 自我演化失败:\n{result['validation_result']}", ""
+                        return f"自我演化失败:\n{result['validation_result']}", ""
                 else:
-                    return "❌ 错误：请提供要演化的具体问题。", ""
+                    return "错误：请提供要演化的具体问题。", ""
                     
             except Exception as e:
                 return f"自我演化时出错：{str(e)}", ""
@@ -373,7 +373,7 @@ def generate_code(prompt, system_prompt, max_tokens, temperature, top_p, enable_
             ]
             
             response = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
-            return "✅ 代码生成完成", response
+            return "代码生成完成", response
             
         except Exception as e:
             return f"生成代码时出错：{str(e)}", ""

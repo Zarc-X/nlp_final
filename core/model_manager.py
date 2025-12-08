@@ -43,10 +43,10 @@ def load_model(model_path=None):
         model = model.to(device)
         model.eval()
         
-        return f"✅ 模型加载完成！\n模型路径: {model_path}\n使用设备: {device}"
+        return f"模型加载完成！\n模型路径: {model_path}\n使用设备: {device}"
         
     except Exception as e:
-        return f"❌ 加载模型时出错：{str(e)}"
+        return f"加载模型时出错：{str(e)}"
 
 
 def get_model():

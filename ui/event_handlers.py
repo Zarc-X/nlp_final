@@ -11,7 +11,7 @@ def update_api_config(api_key, api_32b, api_14b):
     API_CONFIG["api_key"] = api_key
     API_CONFIG["qwen_32b_api_url"] = api_32b
     API_CONFIG["qwen_14b_api_url"] = api_14b
-    return "✅ API配置已更新"
+    return "API配置已更新"
 
 
 def update_evolution_config(enable, keywords, batch, lr):
@@ -20,7 +20,7 @@ def update_evolution_config(enable, keywords, batch, lr):
     EVOLUTION_CONFIG["evolution_keywords"] = [k.strip() for k in keywords.split(",") if k.strip()]
     EVOLUTION_CONFIG["evolution_batch_size"] = batch
     EVOLUTION_CONFIG["learning_rate"] = lr
-    return "✅ 自我演化配置已更新"
+    return "自我演化配置已更新"
 
 
 def detect_mode(prompt):
@@ -32,11 +32,11 @@ def detect_mode(prompt):
     
     if should_evolve:
         if problems:
-            return f"**当前模式：** 🚀 批量自我演化模式（检测到{len(problems)}个问题）"
+            return f"**当前模式：** 批量自我演化模式（检测到{len(problems)}个问题）"
         else:
-            return "**当前模式：** 🔄 单问题自我演化模式"
+            return "**当前模式：** 单问题自我演化模式"
     
-    return "**当前模式：** 💻 普通代码生成模式"
+    return "**当前模式：** 普通代码生成模式"
 
 
 def test_problem_extraction(prompt):
@@ -49,8 +49,8 @@ def test_problem_extraction(prompt):
     if not problems:
         return "检测到自我演化关键词，但没有提取到问题。"
     
-    result = f"✅ 检测到自我演化模式\n"
-    result += f"📋 提取到 {len(problems)} 个问题：\n\n"
+    result = f"检测到自我演化模式\n"
+    result += f"提取到 {len(problems)} 个问题：\n\n"
     
     for i, problem in enumerate(problems, 1):
         result += f"{i}. {problem}\n"

@@ -49,7 +49,7 @@ def list_training_data(limit: int = 20) -> str:
     files.sort(reverse=True)
     files = files[:limit]
     
-    result = f"📚 最近 {len(files)} 个训练样本：\n\n"
+    result = f"最近 {len(files)} 个训练样本：\n\n"
     
     for i, file in enumerate(files, 1):
         file_path = os.path.join(TRAINING_DATA_DIR, file)

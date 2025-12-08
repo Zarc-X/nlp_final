@@ -41,14 +41,14 @@ def update_progress(tracker: Dict, step_name: str, success: bool = True, message
     tracker["logs"].append(log_entry)
     
     # 构建状态报告
-    report = f"📊 进度: {progress_percent:.1f}% ({tracker['current']}/{tracker['total']})\n"
-    report += f"✅ 成功: {tracker['success']} | ❌ 失败: {tracker['failed']}\n"
-    report += f"⏱️ 用时: {elapsed_time:.1f}秒\n"
-    report += f"📝 当前步骤: {step_name}\n"
+    report = f"进度: {progress_percent:.1f}% ({tracker['current']}/{tracker['total']})\n"
+    report += f"成功: {tracker['success']} | 失败: {tracker['failed']}\n"
+    report += f"用时: {elapsed_time:.1f}秒\n"
+    report += f"当前步骤: {step_name}\n"
     if message:
         if len(message) > 100:
-            report += f"💬 {message[:100]}...\n"
+            report += f"{message[:100]}...\n"
         else:
-            report += f"💬 {message}\n"
+            report += f"{message}\n"
     
     return report, tracker
