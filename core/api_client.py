@@ -17,14 +17,14 @@ def get_client() -> OpenAI:
         # 根据 region 设置 base_url
         region = API_CONFIG.get("region", "beijing")
         if region == "beijing":
-            base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1"
+            base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
         elif region == "singapore":
             base_url = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1"
         else:
-            base_url = API_CONFIG.get("base_url", "https://dashscope.aliyuncs.com/compatible-mode/v1")
+            base_url = API_CONFIG.get("base_url", "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions")
         
         _client = OpenAI(
-            api_key=API_CONFIG["api_key"],
+            api_key="sk-1d1d9ecf1f1b446588871b3e6d5d3a30",
             base_url=base_url,
             timeout=VALIDATION_CONFIG["timeout_seconds"]
         )

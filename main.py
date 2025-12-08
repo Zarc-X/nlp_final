@@ -44,8 +44,8 @@ def create_gradio_interface():
                     api_key_input = gr.Textbox(
                         label="API密钥", value=API_CONFIG["api_key"], type="password", lines=1
                     )
-                    api_70b_url = gr.Textbox(
-                        label="70B API地址", value=API_CONFIG["qwen_70b_api_url"], lines=1
+                    api_32b_url = gr.Textbox(
+                        label="32B API地址", value=API_CONFIG["qwen_32b_api_url"], lines=1
                     )
                     api_14b_url = gr.Textbox(
                         label="14B API地址", value=API_CONFIG["qwen_14b_api_url"], lines=1
@@ -163,7 +163,7 @@ def create_gradio_interface():
         # API配置更新
         api_key_input.change(
             fn=update_api_config,
-            inputs=[api_key_input, api_70b_url, api_14b_url],
+            inputs=[api_key_input, api_32b_url, api_14b_url],
             outputs=gr.Textbox(visible=False)
         )
         
@@ -231,7 +231,7 @@ def create_gradio_interface():
         1. 检测"自我演化"关键词
         2. 提取所有引号内的问题
         3. 对每个问题：
-           - 调用70B API生成代码
+           - 调用32B API生成代码
            - 14B模型验证代码逻辑
            - 语法检查
            - 保存训练数据

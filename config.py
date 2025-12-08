@@ -12,8 +12,8 @@ CHECKPOINT_DIR = "./model_checkpoints"
 
 # ====== API配置 ======
 API_CONFIG = {
-    "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",  # base_url，不包含 /chat/completions
-    "api_key": "sk-0de8170042f14c87b88adb94a9c3d115",
+    "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",  # base_url，不包含 /chat/completions
+    "api_key": _client["api_key"],
     "region": "beijing",  # 可选 "beijing" 或 "singapore"
 }
 

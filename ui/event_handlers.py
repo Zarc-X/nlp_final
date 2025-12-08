@@ -6,10 +6,10 @@ from utils.text_utils import detect_evolution_mode, extract_problems_from_text
 from config import API_CONFIG, EVOLUTION_CONFIG, GENERATION_CONFIG
 
 
-def update_api_config(api_key, api_70b, api_14b):
+def update_api_config(api_key, api_32b, api_14b):
     """更新API配置"""
     API_CONFIG["api_key"] = api_key
-    API_CONFIG["qwen_70b_api_url"] = api_70b
+    API_CONFIG["qwen_32b_api_url"] = api_32b
     API_CONFIG["qwen_14b_api_url"] = api_14b
     return "✅ API配置已更新"
 

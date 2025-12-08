@@ -21,10 +21,10 @@ device = None
 # 模型路径
 DEFAULT_MODEL_PATH = "./models/Qwen2.5-Coder-0.5B-Instruct"
 
-# API配置（70B和14B模型）
+# API配置（32B和14B模型）
 API_CONFIG = {
-    "qwen_70b_api_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
-    "qwen_14b_api_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    "qwen_32b_api_url": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+    "qwen_14b_api_url": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
     "api_key": "sk-0de8170042f14c87b88adb94a9c3d115",
 }
 
@@ -162,7 +162,7 @@ def update_progress(tracker: Dict, step_name: str, success: bool = True, message
     return report, tracker
 
 # ====== API调用函数 ======
-def call_qwen_api(api_url: str, prompt: str, model_name: str = "Qwen2.5-Coder-70B", 
+def call_qwen_api(api_url: str, prompt: str, model_name: str = "qwen2.5-coder-32b-instruct", 
                   max_tokens: int = 1024, temperature: float = 0.7, 
                   retries: int = 3) -> Tuple[bool, str]:
     """
@@ -237,7 +237,7 @@ def validate_code_with_14b(instruct: str, code: str) -> Tuple[bool, str]:
     success, response = call_qwen_api(
         API_CONFIG["qwen_14b_api_url"], 
         validation_prompt, 
-        model_name="Qwen2.5-Coder-14B",
+        model_name="qwen2.5-coder-14b-instruct",
         max_tokens=256,
         temperature=0.3
     )
@@ -472,11 +472,11 @@ def process_single_problem(problem: str, system_prompt: str = None) -> Tuple[boo
         "saved_file": ""
     }
     
-    # 步骤1: 使用70B模型生成代码
+    # 步骤1: 使用32B模型生成代码
     success, code = call_qwen_api(
-        API_CONFIG["qwen_70b_api_url"],
+        API_CONFIG["qwen_32b_api_url"],
         problem,
-        model_name="Qwen2.5-Coder-70B"
+        model_name="qwen2.5-coder-32b-instruct"
     )
     
     if not success:
@@ -829,8 +829,8 @@ with gr.Blocks(title="Qwen2.5-Coder 批量自我演化系统", theme=gr.themes.S
                 api_key_input = gr.Textbox(
                     label="API密钥", value=API_CONFIG["api_key"], type="password", lines=1
                 )
-                api_70b_url = gr.Textbox(
-                    label="70B API地址", value=API_CONFIG["qwen_70b_api_url"], lines=1
+                api_32b_url = gr.Textbox(
+                    label="32B API地址", value=API_CONFIG["qwen_32b_api_url"], lines=1
                 )
                 api_14b_url = gr.Textbox(
                     label="14B API地址", value=API_CONFIG["qwen_14b_api_url"], lines=1
@@ -908,10 +908,10 @@ with gr.Blocks(title="Qwen2.5-Coder 批量自我演化系统", theme=gr.themes.S
             )
     
     # ====== 事件处理 ======
-    def update_api_config(api_key, api_70b, api_14b):
+    def update_api_config(api_key, api_32b, api_14b):
         global API_CONFIG
         API_CONFIG["api_key"] = api_key
-        API_CONFIG["qwen_70b_api_url"] = api_70b
+        API_CONFIG["qwen_32b_api_url"] = api_32b
         API_CONFIG["qwen_14b_api_url"] = api_14b
         return "✅ API配置已更新"
     
@@ -992,7 +992,7 @@ with gr.Blocks(title="Qwen2.5-Coder 批量自我演化系统", theme=gr.themes.S
     # API配置更新
     api_key_input.change(
         fn=update_api_config,
-        inputs=[api_key_input, api_70b_url, api_14b_url],
+        inputs=[api_key_input, api_32b_url, api_14b_url],
         outputs=gr.Textbox(visible=False)
     )
     
@@ -1060,7 +1060,7 @@ with gr.Blocks(title="Qwen2.5-Coder 批量自我演化系统", theme=gr.themes.S
     1. 检测"自我演化"关键词
     2. 提取所有引号内的问题
     3. 对每个问题：
-       - 调用70B API生成代码
+       - 调用32b API生成代码
        - 14B模型验证代码逻辑
        - 语法检查
        - 保存训练数据
