@@ -8,7 +8,14 @@ from .evolution_core import (
     process_single_problem,
     fine_tune_on_examples,
     batch_self_evolution,
-    generate_code  # 添加这行
+    generate_code
+)
+from .model_evaluation import evaluate_model_on_humaneval, extract_function_code, get_evaluation_help
+from .fine_tune_manager import (
+    fine_tune_model_with_data,
+    get_training_data_from_files,
+    get_fine_tune_status,
+    get_fine_tune_help
 )
 
 __all__ = [
@@ -21,5 +28,12 @@ __all__ = [
     'process_single_problem',
     'fine_tune_on_examples',
     'batch_self_evolution',
-    'generate_code'  # 添加这行
+    'generate_code',
+    'evaluate_model_on_humaneval',
+    'extract_function_code',
+    'get_evaluation_help',
+    'fine_tune_model_with_data',
+    'get_training_data_from_files',
+    'get_fine_tune_status',
+    'get_fine_tune_help',
 ]

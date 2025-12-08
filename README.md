@@ -16,6 +16,8 @@
       │   ├── model_manager.py       # 模型管理
       │   ├── api_client.py          # API调用
       │   ├── code_processor.py      # 代码处理与验证
+      │   ├── model_evaluation.py    # 模型评估模块
+      │   ├── fine_tune_manager.py   # 微调管理模块
       │   └── evolution_core.py      # 自我演化核心逻辑
       │
       ├── data/                      # 数据管理模块
