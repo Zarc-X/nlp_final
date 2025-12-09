@@ -25,7 +25,7 @@ DEFAULT_MODEL_PATH = "./models/Qwen2.5-Coder-0.5B-Instruct"
 API_CONFIG = {
     "qwen_32b_api_url": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
     "qwen_14b_api_url": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
-    "api_key": "sk-0de8170042f14c87b88adb94a9c3d115",
+    "api_key": "sk-1d1d9ecf1f1b446588871b3e6d5d3a30",
 }
 
 # 自我演化配置
@@ -152,12 +152,12 @@ def update_progress(tracker: Dict, step_name: str, success: bool = True, message
     tracker["logs"].append(log_entry)
     
     # 构建状态报告
-    report = f"📊 进度: {progress_percent:.1f}% ({tracker['current']}/{tracker['total']})\n"
-    report += f"✅ 成功: {tracker['success']} | ❌ 失败: {tracker['failed']}\n"
-    report += f"⏱️ 用时: {elapsed_time:.1f}秒\n"
-    report += f"📝 当前步骤: {step_name}\n"
+    report = f" 进度: {progress_percent:.1f}% ({tracker['current']}/{tracker['total']})\n"
+    report += f" 成功: {tracker['success']} |  失败: {tracker['failed']}\n"
+    report += f" 用时: {elapsed_time:.1f}秒\n"
+    report += f" 当前步骤: {step_name}\n"
     if message:
-        report += f"💬 {message[:100]}...\n" if len(message) > 100 else f"💬 {message}\n"
+        report += f" {message[:100]}...\n" if len(message) > 100 else f" {message}\n"
     
     return report, tracker
 
@@ -452,7 +452,7 @@ def fine_tune_on_examples(examples: List[Dict]) -> str:
         
         model.eval()
         
-        return f"✅ 微调完成，处理了{successful_updates}个示例，平均损失: {avg_loss:.4f}"
+        return f" 微调完成，处理了{successful_updates}个示例，平均损失: {avg_loss:.4f}"
         
     except Exception as e:
         model.eval()
@@ -524,7 +524,7 @@ def batch_self_evolution(problems: List[str], system_prompt: str = None) -> str:
     处理用户输入中提取的所有问题
     """
     if not problems:
-        return "❌ 错误：没有提取到有效的编程问题。请确保问题用引号括起来。"
+        return " 错误：没有提取到有效的编程问题。请确保问题用引号括起来。"
     
     total_problems = len(problems)
     batch_size = EVOLUTION_CONFIG["evolution_batch_size"]
@@ -533,9 +533,9 @@ def batch_self_evolution(problems: List[str], system_prompt: str = None) -> str:
     tracker = create_progress_tracker(total_problems)
     
     report_lines = []
-    report_lines.append("🚀 开始批量自我演化流程")
-    report_lines.append(f"📋 提取到 {total_problems} 个编程问题")
-    report_lines.append(f"📦 批量大小: {batch_size}")
+    report_lines.append(" 开始批量自我演化流程")
+    report_lines.append(f" 提取到 {total_problems} 个编程问题")
+    report_lines.append(f" 批量大小: {batch_size}")
     report_lines.append("=" * 60)
     
     # 显示提取到的问题
@@ -557,7 +557,7 @@ def batch_self_evolution(problems: List[str], system_prompt: str = None) -> str:
         batch_num = i // batch_size + 1
         total_batches = (total_problems + batch_size - 1) // batch_size
         
-        report_lines.append(f"\n📁 处理批次 {batch_num}/{total_batches}")
+        report_lines.append(f"\n 处理批次 {batch_num}/{total_batches}")
         
         # 并行处理批次中的问题
         with ThreadPoolExecutor(max_workers=min(batch_size, 4)) as executor:
@@ -586,9 +586,9 @@ def batch_self_evolution(problems: List[str], system_prompt: str = None) -> str:
                     
                     if success:
                         successful_examples.append(result)
-                        report_lines.append(f"  ✅ 已保存到: {result['saved_file']}")
+                        report_lines.append(f"  已保存到: {result['saved_file']}")
                     else:
-                        report_lines.append(f"  ❌ 失败: {result.get('validation_result', '未知错误')[:80]}...")
+                        report_lines.append(f"   失败: {result.get('validation_result', '未知错误')[:80]}...")
                         
                 except Exception as e:
                     progress_report, tracker = update_progress(tracker, "处理异常", False, str(e))
@@ -633,16 +633,16 @@ def batch_self_evolution(problems: List[str], system_prompt: str = None) -> str:
         with open(stats_file, 'w', encoding='utf-8') as f:
             json.dump(stats, f, ensure_ascii=False, indent=2)
         
-        report_lines.append(f"📊 统计数据已保存到: {stats_file}")
+        report_lines.append(f" 统计数据已保存到: {stats_file}")
     else:
-        report_lines.append("\n⚠️ 没有成功的示例，跳过微调")
+        report_lines.append("\n 没有成功的示例，跳过微调")
     
     # 最终报告
     report_lines.append("\n" + "=" * 60)
-    report_lines.append("🎉 批量自我演化流程完成！")
-    report_lines.append(f"✅ 成功处理: {tracker['success']}/{total_problems}")
-    report_lines.append(f"❌ 失败: {tracker['failed']}/{total_problems}")
-    report_lines.append(f"⏱️ 总用时: {time.time() - tracker['start_time']:.1f}秒")
+    report_lines.append(" 批量自我演化流程完成！")
+    report_lines.append(f" 成功处理: {tracker['success']}/{total_problems}")
+    report_lines.append(f" 失败: {tracker['failed']}/{total_problems}")
+    report_lines.append(f" 总用时: {time.time() - tracker['start_time']:.1f}秒")
     
     if successful_examples:
         report_lines.append(f"💾 模型已更新，检查点已保存")
@@ -681,10 +681,10 @@ def load_model(model_path=None):
         model = model.to(device)
         model.eval()
         
-        return f"✅ 模型加载完成！\n模型路径: {model_path}\n使用设备: {device}"
+        return f" 模型加载完成！\n模型路径: {model_path}\n使用设备: {device}"
         
     except Exception as e:
-        return f"❌ 加载模型时出错：{str(e)}"
+        return f" 加载模型时出错：{str(e)}"
 
 # ====== 主生成函数 ======
 def generate_code(prompt, system_prompt, max_tokens, temperature, top_p, enable_evolution=True):
@@ -719,21 +719,21 @@ def generate_code(prompt, system_prompt, max_tokens, temperature, top_p, enable_
                     success, result = process_single_problem(clean_prompt, system_prompt)
                     
                     if success:
-                        status = f"✅ 单问题自我演化完成！\n"
-                        status += f"📁 已保存训练数据到: {result['saved_file']}\n"
+                        status = f" 单问题自我演化完成！\n"
+                        status += f" 已保存训练数据到: {result['saved_file']}\n"
                         
                         # 微调模型
                         fine_tune_result = fine_tune_on_examples([{
                             "instruction": result["problem"],
                             "code": result["generated_code"]
                         }])
-                        status += f"🎯 {fine_tune_result}"
+                        status += f" {fine_tune_result}"
                         
                         return status, result["generated_code"]
                     else:
-                        return f"❌ 自我演化失败:\n{result['validation_result']}", ""
+                        return f" 自我演化失败:\n{result['validation_result']}", ""
                 else:
-                    return "❌ 错误：请提供要演化的具体问题。", ""
+                    return " 错误：请提供要演化的具体问题。", ""
                     
             except Exception as e:
                 return f"自我演化时出错：{str(e)}", ""
@@ -768,7 +768,7 @@ def generate_code(prompt, system_prompt, max_tokens, temperature, top_p, enable_
             ]
             
             response = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
-            return "✅ 代码生成完成", response
+            return " 代码生成完成", response
             
         except Exception as e:
             return f"生成代码时出错：{str(e)}", ""
@@ -786,7 +786,7 @@ def list_training_data(limit: int = 20):
     files.sort(reverse=True)  # 按时间倒序
     files = files[:limit]
     
-    result = f"📚 最近 {len(files)} 个训练样本：\n\n"
+    result = f" 最近 {len(files)} 个训练样本：\n\n"
     
     for i, file in enumerate(files, 1):
         file_path = os.path.join(TRAINING_DATA_DIR, file)
@@ -808,9 +808,9 @@ def list_training_data(limit: int = 20):
 
 # ====== Gradio界面 ======
 with gr.Blocks(title="Qwen2.5-Coder 批量自我演化系统", theme=gr.themes.Soft()) as demo:
-    gr.Markdown("# 🤖 Qwen2.5-Coder 批量自我演化系统")
+    gr.Markdown("#  Qwen2.5-Coder 批量自我演化系统")
     gr.Markdown("""
-    ## 🚀 功能特性：
+    ##  功能特性：
     1. **普通代码生成**：使用本地1.5B模型生成代码
     2. **批量自我演化**：输入包含多个引号内的问题，系统自动提取并批量训练
     3. **智能问题提取**：自动从文本中提取引号内的编程问题
@@ -818,14 +818,14 @@ with gr.Blocks(title="Qwen2.5-Coder 批量自我演化系统", theme=gr.themes.S
     
     with gr.Row():
         with gr.Column(scale=1):
-            gr.Markdown("### 📁 模型设置")
+            gr.Markdown("###  模型设置")
             model_path_input = gr.Textbox(
                 label="模型路径", value=DEFAULT_MODEL_PATH, lines=1
             )
-            load_btn = gr.Button("🔄 加载模型", variant="primary", size="lg")
+            load_btn = gr.Button(" 加载模型", variant="primary", size="lg")
             load_status = gr.Textbox(label="模型状态", interactive=False, lines=3)
             
-            with gr.Accordion("🔑 API设置", open=False):
+            with gr.Accordion(" API设置", open=False):
                 api_key_input = gr.Textbox(
                     label="API密钥", value=API_CONFIG["api_key"], type="password", lines=1
                 )
@@ -836,7 +836,7 @@ with gr.Blocks(title="Qwen2.5-Coder 批量自我演化系统", theme=gr.themes.S
                     label="14B API地址", value=API_CONFIG["qwen_14b_api_url"], lines=1
                 )
             
-            with gr.Accordion("⚙️ 自我演化设置", open=False):
+            with gr.Accordion(" 自我演化设置", open=False):
                 enable_evolution = gr.Checkbox(
                     label="启用自我演化", value=EVOLUTION_CONFIG["enable_self_evolution"]
                 )
@@ -850,7 +850,7 @@ with gr.Blocks(title="Qwen2.5-Coder 批量自我演化系统", theme=gr.themes.S
                     label="学习率", minimum=1e-6, maximum=1e-3, value=EVOLUTION_CONFIG["learning_rate"], step=1e-6
                 )
             
-            with gr.Accordion("📊 数据管理", open=False):
+            with gr.Accordion(" 数据管理", open=False):
                 with gr.Row():
                     view_data_btn = gr.Button("查看训练数据", variant="secondary")
                     test_extraction_btn = gr.Button("测试问题提取", variant="secondary")
@@ -859,7 +859,7 @@ with gr.Blocks(title="Qwen2.5-Coder 批量自我演化系统", theme=gr.themes.S
                     label="训练数据", interactive=False, lines=10
                 )
             
-            with gr.Accordion("⚙️ 生成设置", open=False):
+            with gr.Accordion(" 生成设置", open=False):
                 system_prompt_input = gr.Textbox(
                     label="系统提示词",
                     value="你是一个专业的编程助手，擅长编写和解释代码。",
@@ -876,7 +876,7 @@ with gr.Blocks(title="Qwen2.5-Coder 批量自我演化系统", theme=gr.themes.S
                 )
         
         with gr.Column(scale=2):
-            gr.Markdown("### 💻 代码生成与自我演化")
+            gr.Markdown("###  代码生成与自我演化")
             
             mode_indicator = gr.Markdown("**当前模式：** 等待输入...")
             
@@ -896,8 +896,8 @@ with gr.Blocks(title="Qwen2.5-Coder 批量自我演化系统", theme=gr.themes.S
             )
             
             with gr.Row():
-                generate_btn = gr.Button("✨ 生成代码", variant="primary", size="lg")
-                evolve_btn = gr.Button("🚀 执行自我演化", variant="stop", size="lg")
+                generate_btn = gr.Button(" 生成代码", variant="primary", size="lg")
+                evolve_btn = gr.Button(" 执行自我演化", variant="stop", size="lg")
             
             status_output = gr.Textbox(
                 label="执行状态", interactive=False, lines=12
@@ -913,7 +913,7 @@ with gr.Blocks(title="Qwen2.5-Coder 批量自我演化系统", theme=gr.themes.S
         API_CONFIG["api_key"] = api_key
         API_CONFIG["qwen_32b_api_url"] = api_32b
         API_CONFIG["qwen_14b_api_url"] = api_14b
-        return "✅ API配置已更新"
+        return " API配置已更新"
     
     def update_evolution_config(enable, keywords, batch, lr):
         global EVOLUTION_CONFIG
@@ -921,7 +921,7 @@ with gr.Blocks(title="Qwen2.5-Coder 批量自我演化系统", theme=gr.themes.S
         EVOLUTION_CONFIG["evolution_keywords"] = [k.strip() for k in keywords.split(",") if k.strip()]
         EVOLUTION_CONFIG["evolution_batch_size"] = batch
         EVOLUTION_CONFIG["learning_rate"] = lr
-        return "✅ 自我演化配置已更新"
+        return " 自我演化配置已更新"
     
     def detect_mode(prompt):
         if not prompt:
@@ -931,11 +931,11 @@ with gr.Blocks(title="Qwen2.5-Coder 批量自我演化系统", theme=gr.themes.S
         
         if should_evolve:
             if problems:
-                return f"**当前模式：** 🚀 批量自我演化模式（检测到{len(problems)}个问题）"
+                return f"**当前模式：**  批量自我演化模式（检测到{len(problems)}个问题）"
             else:
-                return "**当前模式：** 🔄 单问题自我演化模式"
+                return "**当前模式：**  单问题自我演化模式"
         
-        return "**当前模式：** 💻 普通代码生成模式"
+        return "**当前模式：**  普通代码生成模式"
     
     # 测试问题提取
     def test_problem_extraction(prompt):
@@ -947,8 +947,8 @@ with gr.Blocks(title="Qwen2.5-Coder 批量自我演化系统", theme=gr.themes.S
         if not problems:
             return "检测到自我演化关键词，但没有提取到问题。"
         
-        result = f"✅ 检测到自我演化模式\n"
-        result += f"📋 提取到 {len(problems)} 个问题：\n\n"
+        result = f" 检测到自我演化模式\n"
+        result += f" 提取到 {len(problems)} 个问题：\n\n"
         
         for i, problem in enumerate(problems, 1):
             result += f"{i}. {problem}\n"
@@ -1035,44 +1035,44 @@ with gr.Blocks(title="Qwen2.5-Coder 批量自我演化系统", theme=gr.themes.S
     )
     
     # 使用说明
-    gr.Markdown("""
-    ## 📖 使用说明：
+    # gr.Markdown("""
+    # ## 📖 使用说明：
     
-    ### 1. 普通代码生成：
-    - 输入普通的代码生成提示
-    - 点击"生成代码"按钮
+    # ### 1. 普通代码生成：
+    # - 输入普通的代码生成提示
+    # - 点击"生成代码"按钮
     
-    ### 2. 批量自我演化：
-    - 在输入中包含"自我演化"关键词
-    - 用**双引号**括起每个编程问题
-    - 每个问题占一行或使用分隔符
-    - 点击"执行自我演化"按钮
+    # ### 2. 批量自我演化：
+    # - 在输入中包含"自我演化"关键词
+    # - 用**双引号**括起每个编程问题
+    # - 每个问题占一行或使用分隔符
+    # - 点击"执行自我演化"按钮
     
-    ### 3. 输入格式示例：
-    ```
-    请自我演化
-    "Write a function to find the minimum cost path..."
-    "Write a function to find the similar elements..."
-    "Write a python function to identify non-prime numbers..."
-    ```
+    # ### 3. 输入格式示例：
+    # ```
+    # 请自我演化
+    # "Write a function to find the minimum cost path..."
+    # "Write a function to find the similar elements..."
+    # "Write a python function to identify non-prime numbers..."
+    # ```
     
-    ### 4. 系统流程：
-    1. 检测"自我演化"关键词
-    2. 提取所有引号内的问题
-    3. 对每个问题：
-       - 调用32b API生成代码
-       - 14B模型验证代码逻辑
-       - 语法检查
-       - 保存训练数据
-    4. 用所有成功的问题微调本地1.5B模型
-    5. 返回处理报告
+    # ### 4. 系统流程：
+    # 1. 检测"自我演化"关键词
+    # 2. 提取所有引号内的问题
+    # 3. 对每个问题：
+    #    - 调用32b API生成代码
+    #    - 14B模型验证代码逻辑
+    #    - 语法检查
+    #    - 保存训练数据
+    # 4. 用所有成功的问题微调本地1.5B模型
+    # 5. 返回处理报告
     
-    ### 5. 注意事项：
-    - API密钥需要正确配置
-    - 自我演化过程可能需要几分钟时间
-    - 模型微调后会保存检查点
-    - 训练数据保存在`./evolution_training_data/`目录
-    """)
+    # ### 5. 注意事项：
+    # - API密钥需要正确配置
+    # - 自我演化过程可能需要几分钟时间
+    # - 模型微调后会保存检查点
+    # - 训练数据保存在`./evolution_training_data/`目录
+    # """)
 
 if __name__ == "__main__":
     # 创建必要的目录

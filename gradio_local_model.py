@@ -494,33 +494,33 @@ def evaluate_model(max_tasks: int = None, max_tokens: int = 512, temperature: fl
                 if check_func and candidate_func:
                     check_func(candidate_func)
                     passed_tasks += 1
-                    results.append(f"✅ {task_id}: 通过")
+                    results.append(f" {task_id}: 通过")
                 else:
                     failed_tasks.append(task_id)
-                    results.append(f"❌ {task_id}: 函数未找到（生成的代码中可能没有正确的函数定义）")
+                    results.append(f" {task_id}: 函数未找到（生成的代码中可能没有正确的函数定义）")
                     
             except AssertionError as e:
                 # 测试失败：生成的函数没有通过测试用例
                 # 这意味着函数能够运行，但输出结果不正确
                 failed_tasks.append(task_id)
                 error_msg = str(e)[:150] if str(e) else "断言失败"
-                results.append(f"❌ {task_id}: 测试失败（函数输出不符合预期）")
+                results.append(f" {task_id}: 测试失败（函数输出不符合预期）")
             except SyntaxError as e:
                 # 语法错误：生成的代码有语法问题
                 failed_tasks.append(task_id)
                 error_msg = str(e)[:150]
-                results.append(f"❌ {task_id}: 语法错误 - {error_msg}")
+                results.append(f" {task_id}: 语法错误 - {error_msg}")
             except NameError as e:
                 # 名称错误：可能缺少导入或函数名错误
                 failed_tasks.append(task_id)
                 error_msg = str(e)[:150]
-                results.append(f"❌ {task_id}: 名称错误 - {error_msg}")
+                results.append(f" {task_id}: 名称错误 - {error_msg}")
             except Exception as e:
                 # 其他执行错误：运行时错误
                 failed_tasks.append(task_id)
                 error_type = type(e).__name__
                 error_msg = str(e)[:150]  # 截断错误信息
-                results.append(f"❌ {task_id}: {error_type} - {error_msg}")
+                results.append(f" {task_id}: {error_type} - {error_msg}")
             
             # 实时更新进度
             current_rate = (passed_tasks / (idx + 1) * 100) if (idx + 1) > 0 else 0
@@ -591,34 +591,34 @@ with gr.Blocks(title="Qwen2.5-Coder 本地模型代码生成器", theme=gr.theme
                     value=False,
                     info="勾选此项将评估所有164个任务"
                 )
-            eval_btn = gr.Button("🚀 开始评估", variant="secondary", size="lg")
+            eval_btn = gr.Button(" 开始评估", variant="secondary", size="lg")
             eval_output = gr.Markdown(label="评估结果")
             
             # 添加评估说明
-            with gr.Accordion("📖 评估说明", open=False):
+            with gr.Accordion(" 评估说明", open=False):
                 gr.Markdown("""
                 ### 评估结果说明
                 
-                **✅ 通过**: 生成的函数通过了所有测试用例
+                ** 通过**: 生成的函数通过了所有测试用例
                 
-                **❌ 测试失败**: 
+                ** 测试失败**: 
                 - 函数能够正常执行，但输出结果不符合预期
                 - 说明生成的代码逻辑有误
                 - 例如：返回值错误、边界条件处理不当等
                 
-                **❌ 语法错误**: 
+                ** 语法错误**: 
                 - 生成的代码存在Python语法问题
                 - 例如：缺少冒号、括号不匹配、缩进错误等
                 
-                **❌ 名称错误**: 
+                ** 名称错误**: 
                 - 代码中使用了未定义的变量或函数
                 - 可能缺少必要的导入语句
                 
-                **❌ 函数未找到**: 
+                ** 函数未找到**: 
                 - 生成的代码中没有找到目标函数
                 - 可能是函数名不匹配或代码格式问题
                 
-                **❌ 其他执行错误**: 
+                ** 其他执行错误**: 
                 - 运行时出现的其他错误
                 - 例如：类型错误、索引越界等
                 
@@ -707,7 +707,7 @@ with gr.Blocks(title="Qwen2.5-Coder 本地模型代码生成器", theme=gr.theme
                     step=1,
                     info="微调的训练轮数"
                 )
-                fine_tune_btn = gr.Button("🚀 开始微调", variant="secondary", size="lg")
+                fine_tune_btn = gr.Button(" 开始微调", variant="secondary", size="lg")
                 fine_tune_output = gr.Markdown(label="微调结果")
                 fine_tune_status = gr.Textbox(
                     label="当前数据集状态",
@@ -722,7 +722,7 @@ with gr.Blocks(title="Qwen2.5-Coder 本地模型代码生成器", theme=gr.theme
                 placeholder="例如：请用Python编写一个快速排序算法。",
                 lines=5
             )
-            generate_btn = gr.Button("✨ 生成代码", variant="primary", size="lg")
+            generate_btn = gr.Button(" 生成代码", variant="primary", size="lg")
             output = gr.Code(
                 label="生成的代码",
                 language="python",
